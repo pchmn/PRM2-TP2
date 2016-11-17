@@ -36,4 +36,8 @@ public class Vector {
     public static double angle(Map<String, Integer> v1, Map<String, Integer> v2) {
         return Math.acos(cos(v1, v2));
     }
+
+    public static double degree(Map<String, Integer> v1, Map<String, Integer> v2){
+        return Math.toDegrees(Math.acos(cos(v1, v2)));
+    }
 }
