@@ -4,18 +4,16 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.mail.internet.MimeMultipart;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static vector.Vector.cos;
 
 /**
  * Created by GOSSAN on 17/11/2016.
@@ -62,9 +60,9 @@ public class EMLHelper {
 
                 File file = new File(path);
                 if(cos <= 0.8)
-                    KO.add(/*path*/file.getName());
+                    KO.add(file.getName());
                 else
-                    OK.add(/*path*/file.getName());
+                    OK.add(file.getName());
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -96,12 +94,22 @@ public class EMLHelper {
         Properties props = System.getProperties();
         Session mailSession = Session.getDefaultInstance(props, null);
         MimeMessage message = new MimeMessage(mailSession, is);
-        String content;
+        String content = "", result = "";
 
         try{
-            Multipart mp = (Multipart) message.getContent();
-            BodyPart bp = mp.getBodyPart(0);
-            content = bp.getContent().toString();
+            MimeMultipart mp = (MimeMultipart) message.getContent();
+            int count = mp.getCount();
+            for(int i = 0; i<count; i++){
+                BodyPart bp = mp.getBodyPart(i);
+
+                    result = new BufferedReader(
+                            (new InputStreamReader(bp.getInputStream())))
+                            .lines()
+                            .collect(Collectors.joining("\n"));
+
+                content += result;
+            }
+
         }catch(ClassCastException ex){
             content = (String)message.getContent();
         }
@@ -116,4 +124,6 @@ public class EMLHelper {
         }
         return vector;
     }
+
+
 }
