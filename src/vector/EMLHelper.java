@@ -40,10 +40,12 @@ public class EMLHelper {
     private static List<String> KO = new ArrayList<>();
 
     public static void display(){
-        System.out.println("----- Mail OK ----------");
-        System.out.println(String.join(", ", OK));
-        System.out.println("----- Mail KO ----------");
-        System.out.println(String.join(", ", KO));
+        System.out.println("----------------- Mail OK ---------------- "+OK.size()+" fichiers");
+        for(String value : OK)
+            System.out.println("-> "+value);
+        System.out.println("--------------------- Mail KO ------------ "+KO.size()+" fichiers");
+        for(String value : KO)
+            System.out.println("-> "+value);
     }
 
     public static void run(String directoryPath) {
@@ -58,10 +60,11 @@ public class EMLHelper {
                 V1 = getVector(emlContent, dictionnary);
                 double cos = Vector.cos(V0, V1);
 
+                File file = new File(path);
                 if(cos <= 0.8)
-                    KO.add(path);
+                    KO.add(/*path*/file.getName());
                 else
-                    OK.add(path);
+                    OK.add(/*path*/file.getName());
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -102,7 +105,6 @@ public class EMLHelper {
         }catch(ClassCastException ex){
             content = (String)message.getContent();
         }
-        //System.out.println(content);
         return  content;
     }
 

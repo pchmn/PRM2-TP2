@@ -29,8 +29,7 @@ public class Vector {
         int scalaire = produitScalaire(v1, v2);
         double normeV1 = norme(v1);
         double normeV2 = norme(v2);
-
-        return scalaire / (normeV1 * normeV2);
+        return (normeV1 * normeV2) == 0 ? 0 : scalaire / (normeV1 * normeV2);
     }
 
     public static double angle(Map<String, Integer> v1, Map<String, Integer> v2) {
